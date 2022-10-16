@@ -6,7 +6,7 @@ exports.create = async (req, res, next) => {
     try {
         const user = new User(data);
         user.save();
-        delete user.password;
+        delete user._doc.password;
         return res.status(200).json(user);
     } catch (error) {
         next(error);
