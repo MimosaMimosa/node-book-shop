@@ -8,6 +8,7 @@ const Collection = new Schema(
         published_at: { type: Date },
         photo: [{ url: String, name: String }],
         category: [{ type: Schema.ObjectId, ref: 'Category' }],
+        link: { url: String, name: String, default: null },
     },
     { timestamps: true }
 );
