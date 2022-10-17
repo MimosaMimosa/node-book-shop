@@ -7,6 +7,18 @@ dotenv.config();
 
 const app = express();
 
+app.get('/upload/images/:id',(req,res)=>{
+    res.sendFile(__dirname + req.url)
+})
+
+app.use(function (req, res, next) {
+    res.setHeader('Access-Control-Allow-Origin', 'http://172.20.30.44:3000');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+    res.setHeader('Access-Control-Allow-Credentials', true);
+    next();
+    });
+
 app.use(fileupload());
 app.use(express.json());
 app.use('/api/v1/authors', router.author);
