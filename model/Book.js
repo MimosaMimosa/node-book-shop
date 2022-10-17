@@ -5,10 +5,10 @@ const Collection = new Schema(
     {
         name: { type: String, required: true, max: 100 },
         author: { type: Schema.Types.ObjectId, ref: 'Author' },
-        published_at: { type: Date },
+        published_at: { type: Date,default:null },
         photo: [{ url: String, name: String }],
-        category: [{ type: Schema.ObjectId, ref: 'Category' }],
         link: { url: String, name: String, default: null },
+        categories: [{ type: Schema.ObjectId, ref: 'Category' }],
     },
     { timestamps: true }
 );

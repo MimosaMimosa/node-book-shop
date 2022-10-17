@@ -5,7 +5,7 @@ const Collection = new Schema(
     {
         name: { type: String, required: true, unique: true, max: 50 },
         age: { type: Number, required: true, max: 200 },
-        phone: [{ no: Number }],
+        phone: { type: Number },
     },
     { timestamps: true }
 );
