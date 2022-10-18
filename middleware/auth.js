@@ -7,7 +7,7 @@ exports.verifyToken = (req, res, next) => {
             req.user = decoded.data;
             return next();
         }
-        return res.staus(422).json({ message: 'Invalid Token' });
+        return res.status(422).json({ message: 'Invalid Token' });
     } catch (error) {
         next(error);
     }

@@ -14,7 +14,7 @@ exports.create = async (req, res, next) => {
 
 exports.index = async (req, res, next) => {
 	try {
-        const books = await Book.find().sort({_id:-1}).limit(4).populate('author');
+        const books = await Book.find().sort({_id:-1}).limit(5).populate('author');
         return res.status(200).json(books);
     }catch(error) {
         next(error);
