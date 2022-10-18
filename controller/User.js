@@ -5,7 +5,7 @@ exports.create = async (req, res, next) => {
     const data = req.body;
     try {
         const user = new User(data);
-        user.save();
+        await user.save();
         delete user._doc.password;
         return res.status(200).json(user);
     } catch (error) {

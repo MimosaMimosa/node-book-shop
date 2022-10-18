@@ -1,29 +1,38 @@
-const User = require('../../model/User');
-const { compare } = require('../../utils/bcrypt');
-const jwt = require('jsonwebtoken');
+const User = require("../../model/User");
+const { compare } = require("../../utils/bcrypt");
+const jwt = require("jsonwebtoken");
+
+const maxAge = 3 * 24 * 60 * 60;
 
 exports.login = async (req, res, next) => {
-    const { email, password } = req.body;
-    try {
-        const user = await User.findOne({ email: email });
-        if (user) {
-            if (compare(password, user.password)) {
-                const { password, ...hidePassword } = user._doc;
-                const token = jwt.sign(
-                    {
-                        data: hidePassword,
-                    },
-                    process.env.SECRET_CODE,
-                    { expiresIn: '2h' }
-                );
-                return res.status(200).json({ token });
-            }
+	const { email, password } = req.body;
+	if(req.cookies.book_secret){
+		console.log(req.cookies.book_secret)
+	}
+	try {
+		const user = await User.findOne({ email: email });
+		if (user && compare(password, user.password)) {
+			const { password, ...others } = user._doc;
+			const token = jwt.sign(
+				{
+					data: others,
+				},
+				process.env.SECRET_CODE,
+				{ expiresIn: maxAge }
+			);
 
-            return res
-                .status(422)
-                .json({ message: 'Invalid username or password' });
-        }
-    } catch (error) {
-        next(error);
-    }
+			// res.cookie("book_secret", token, {
+			// 	httpOnly: true,
+			// 	maxAge: maxAge * 1000,
+			// });
+
+			console.log(user);
+			return res.status(200).json({ user:others ,token});
+		}
+		return res
+			.status(422)
+			.json({ message: "Invalid username or password" });
+	} catch (error) {
+		next(error);
+	}
 };
