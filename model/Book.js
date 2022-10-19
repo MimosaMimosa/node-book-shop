@@ -11,7 +11,7 @@ const Collection = new Schema(
 			url: { type: String, default: null },
 			name: { type: String, default: null },
 		},
-		categories: [{ type: Schema.ObjectId, ref: "Category" }],
+		category: { type: Schema.ObjectId, ref: "Category" },
 		price:{type:Number,default:null}
 	},
 	{ timestamps: true }

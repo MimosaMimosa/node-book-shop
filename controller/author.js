@@ -10,4 +10,12 @@ exports.create = async (req, res, next) => {
         next(error);
     }
 };
-exports.index = async () => {};
+
+exports.index = async (req,res,next) => {
+    try {
+        const authors =await Author.find();
+        return res.status(200).json(authors);
+    }catch(error){
+        next(error)
+    }
+};

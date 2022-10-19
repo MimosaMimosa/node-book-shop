@@ -1,4 +1,5 @@
 const Category = require('../model/Category');
+
 exports.create = async (req, res, next) => {
     try {
         const category = new Category(req.body);
@@ -8,3 +9,12 @@ exports.create = async (req, res, next) => {
         next(error);
     }
 };
+
+exports.index = async (req,res,next) => {
+    try {
+        const categories = await Category.find().sort({_id:-1})
+        return res.status(200).json(categories)
+    }catch(error) { 
+        next(error);
+    }
+}

@@ -14,9 +14,33 @@ exports.create = async (req, res, next) => {
 
 exports.index = async (req, res, next) => {
 	try {
-        const books = await Book.find().sort({_id:-1}).limit(5).populate('author');
-        return res.status(200).json(books);
-    }catch(error) {
-        next(error);
-    }
+		const search = {};
+		const category = req.query.category;
+		const author = req.query.author;
+
+		if (category) {
+			search.category = category;
+		}
+
+		if (author) {
+			search.author = author;
+		}
+
+		const books = await Book.find(search)
+			.sort({ _id: -1 })
+			.populate("author")
+			.limit(8);
+		return res.status(200).json(books);
+	} catch (error) {
+		next(error);
+	}
+};
+
+exports.show = async (req, res, next) => {
+	try {
+		const book = await Book.findById(req.params.id).populate("author");
+		return res.status(200).json(book);
+	} catch (error) {
+		next(error);
+	}
 };

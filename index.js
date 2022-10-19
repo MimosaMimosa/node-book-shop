@@ -13,7 +13,7 @@ app.get("/upload/images/:id", (req, res) => {
 });
 
 app.use(function (req, res, next) {
-	res.setHeader("Access-Control-Allow-Origin", "http://172.20.30.44:3000");
+	res.setHeader("Access-Control-Allow-Origin", "*");
 	res.setHeader(
 		"Access-Control-Allow-Methods",
 		"GET, POST, OPTIONS, PUT, PATCH, DELETE"
@@ -37,9 +37,7 @@ app.use("/api/v1/categories", router.category);
 
 connectDB()
 	.then(() => {
-		app.listen(process.env.SERVER_PORT, () => {
-			console.log(`App is running at port ${process.env.SERVER_PORT}`);
-		});
+		app.listen(process.env.SERVER_PORT);
 	})
 	.catch((error) => {
 		if (error) console.log("database connection error");
