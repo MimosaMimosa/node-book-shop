@@ -1,6 +1,7 @@
 const User = require('../model/User');
 const { hash } = require('../utils/bcrypt');
 exports.create = async (req, res, next) => {
+    req.body.photo = { url: req.image.path, name: req.image.name };
     req.body.password = hash(req.body.password);
     const data = req.body;
     try {
