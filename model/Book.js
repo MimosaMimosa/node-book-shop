@@ -12,7 +12,7 @@ const Collection = new Schema(
 			name: { type: String, default: null },
 		},
 		category: { type: Schema.ObjectId, ref: "Category" },
-		price:{type:Number,default:null}
+		price: { type: Number, default: null },
 	},
 	{ timestamps: true }
 );
