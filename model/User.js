@@ -7,6 +7,7 @@ const Collection = new Schema(
         email: { type: String, required: true, unique: true, max: 5 },
         role: { type: Number, default: 1 },
         password: { type: String, required: true, max: 50 },
+        Address: { type: String, required: true, max: 50 },
     },
     { timestamps: true }
 );
