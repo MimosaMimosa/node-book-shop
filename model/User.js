@@ -11,7 +11,7 @@ const Collection = new Schema(
         image: { url: { type: String }, name: { type: String } },
         password: {
             type: String,
-            required: [true, 'Password is required'],
+            required: true,
             max: 50,
         },
         address: { type: String, required: true, max: 50 },
