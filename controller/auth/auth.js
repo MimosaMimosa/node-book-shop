@@ -6,9 +6,6 @@ const maxAge = 3 * 24 * 60 * 60;
 
 exports.login = async (req, res, next) => {
 	const { email, password } = req.body;
-	if(req.cookies.book_secret){
-		console.log(req.cookies.book_secret)
-	}
 	try {
 		const user = await User.findOne({ email: email });
 		if (user && compare(password, user.password)) {
@@ -21,12 +18,6 @@ exports.login = async (req, res, next) => {
 				{ expiresIn: maxAge }
 			);
 
-			// res.cookie("book_secret", token, {
-			// 	httpOnly: true,
-			// 	maxAge: maxAge * 1000,
-			// });
-
-			console.log(user);
 			return res.status(200).json({ user:others ,token});
 		}
 		return res
