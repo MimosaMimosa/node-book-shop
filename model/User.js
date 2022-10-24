@@ -6,15 +6,16 @@ const Collection = new Schema(
     {
         name: { type: String, required: true, max: 50 },
         name_and_surname: { type: String, required: true, max: 50 },
-        email: { type: String, required: true, unique: true, max: 5 },
-        role: { type: Number, default: 1 },
+        email: { type: String, required: true, unique: true },
+        phone: { type: String, required: true, maxlength: 11 },
+        role: { type: String, default: 1 },
         image: { url: { type: String }, name: { type: String } },
         password: {
             type: String,
             required: true,
             max: 50,
         },
-        address: { type: String, required: true, max: 50 },
+        address: { type: String, required: true, max: 100 },
         country: { type: String, required: true, max: 50 },
     },
     { timestamps: true }

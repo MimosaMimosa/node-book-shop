@@ -12,6 +12,10 @@ app.get('/upload/images/:id', (req, res) => {
     res.sendFile(__dirname + req.url);
 });
 
+app.get('/upload/users/:id', (req, res, next) => {
+    res.sendFile(__dirname + req.url);
+});
+
 app.use(function (req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader(
