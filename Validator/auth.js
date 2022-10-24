@@ -1,5 +1,5 @@
 const Joi = require('joi');
-const { showError } = require('./helper');
+const { ErrorBag } = require('./helper');
 
 const auth = {
     loginRequest: (...arg) => {
@@ -11,7 +11,7 @@ const auth = {
             password: Joi.string().min(6).max(20),
         });
 
-        showError(...arg, schema);
+        ErrorBag(...arg, schema);
     },
 };
 

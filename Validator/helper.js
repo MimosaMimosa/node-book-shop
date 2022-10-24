@@ -1,8 +1,8 @@
 exports.ErrorBag = async (...arg) => {
     const [req, res, next, schema] = arg;
     const data = { ...req.body };
-    data.image = 'undefined';
-    if (req.files?.image) {
+    
+    if (req.files) {
         data.image = req.files?.image?.mimetype ?? 'undefined';
     }
     try {
