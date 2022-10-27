@@ -22,10 +22,13 @@ Collection.statics.paginate = async function (req) {
 	const page = parseInt(req.query.page ?? 1);
 	const limit = parseInt(req.query.limit ?? 10);
 	const skip = limit * (page - 1);
-	const count = await Book.count();
+	const count = await this.count();
 	const totalPage = Math.ceil(count / limit);
 	req.totalPage = totalPage;
-	return mongoose.model("Book").find(req.query).skip(skip).limit(limit);
+	return this.find(req.query)
+		.skip(skip)
+		.limit(limit)
+		.populate("author", ["name", "_id"].join(" "));
 };
 
 const Book = mongoose.model("Book", Collection);
