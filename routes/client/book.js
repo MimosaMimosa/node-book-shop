@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { create, index, show } = require("../../controller/book");
+const { create, index, show } = require("../../controller/client/book");
 const { verifyToken } = require("../../middleware/auth");
 const { uploadImage } = require("../../utils/upload");
 const { storeRequest } = require("../../Validator/book");

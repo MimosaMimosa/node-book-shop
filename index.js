@@ -2,9 +2,10 @@ const express = require("express");
 const dotenv = require("dotenv");
 const connectDB = require("./database");
 const client = require("./routes/client/routelist");
+const admin = require("./routes/admin/routelist");
 const fileupload = require("express-fileupload");
 const cors = require("cors");
-const { registerClient } = require("./routes/helper");
+const { registerClient, registerAdmin } = require("./routes/helper");
 dotenv.config();
 
 const app = express();
@@ -30,10 +31,12 @@ app.use(express.json());
 /**
  * register router
  */
-registerClient(app,client,'v1')
+registerClient(app)
+registerAdmin(app);
 
 app.use((error, req, res, next) => {
 	if (error) {
+		console.log(error)
 		error.status = error.status ?? 500;
 		error.success = error.success ?? false;
 		error.message = error.message ?? "Sever Error!";

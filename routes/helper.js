@@ -1,3 +1,17 @@
+const client = require('./client/routelist')
+const admin = require('./admin/routelist')
+/**
+ * 
+ * @param {Object} app 
+ * @param {Object} router 
+ * @param {String} version 
+ * @return {void}
+ */
+exports.registerClient = (app => {
+    for(let key in client){
+        app.use(`/api/v1/${key}`,client[key])
+    }
+});
 
 /**
  * 
@@ -6,8 +20,9 @@
  * @param {String} version 
  * @return {void}
  */
-exports.registerClient = (app, router,version) => {
-    for(let key in router){
-        app.use(`api/${version}/${key}`,router[key])
+ exports.registerAdmin = (app) => {
+    for(let key in admin){
+        app.use(`/api/v1/admin/${key}`,admin[key])
     }
 };
+
