@@ -19,13 +19,25 @@ const Collection = new Schema(
 );
 
 Collection.statics.paginate = async function (req) {
+	const filter = {}
+		const category = req.query.category;
+		const author = req.query.author;
+
+		if (category) {
+			req.query.category = category;
+		}
+
+		if (author) {
+			req.query.author = author;
+		}
+		
 	const page = parseInt(req.query.page ?? 1);
 	const limit = parseInt(req.query.limit ?? 10);
 	const skip = limit * (page - 1);
-	const count = await this.count();
+	const count = await this.find(filter).count();
 	const totalPage = Math.ceil(count / limit);
 	req.totalPage = totalPage;
-	return this.find(req.query)
+	return this.find(filter)
 		.skip(skip)
 		.limit(limit)
 		.populate("author", ["name", "_id"].join(" "));
