@@ -27,7 +27,7 @@ Collection.pre('save', function (next) {
         user.password = hash(user.password);
         next();
     } catch (error) {
-        throw Error(error);
+        next(error)
     }
 });
 

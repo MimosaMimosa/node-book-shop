@@ -1,33 +1,36 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const connectDB = require("./database");
-const router = require("./routes/routelist");
+const client = require("./routes/client/routelist");
 const fileupload = require("express-fileupload");
 const cors = require("cors");
+const { registerClient } = require("./routes/helper");
 dotenv.config();
 
 const app = express();
 
-app.get("/upload/images/:id", (req, res) => {
+app.get(/(upload).*/, (req, res) => {
 	res.sendFile(__dirname + req.url);
 });
 
-app.get("/upload/users/:id", (req, res, next) => {
-	res.sendFile(__dirname + req.url);
-});
+// app.get(/(secret).*/,(req,res)=> res.send('ggg'))
 
-app.get("/upload/authors/:id", (req, res, next) => {
-	res.sendFile(__dirname + req.url);
-});
+// app.get("/upload/users/:id", (req, res, next) => {
+// 	res.sendFile(__dirname + req.url);
+// });
+
+// app.get("/upload/authors/:id", (req, res, next) => {
+// 	res.sendFile(__dirname + req.url);
+// });
 
 app.use(cors());
 app.use(fileupload());
 app.use(express.json());
-app.use("/api/v1/authors", router.author);
-app.use("/api/v1/books", router.book);
-app.use("/api/v1/users", router.user);
-app.use("/api/v1/auth", router.auth);
-app.use("/api/v1/categories", router.category);
+
+/**
+ * register router
+ */
+registerClient(app,client,'v1')
 
 app.use((error, req, res, next) => {
 	if (error) {
