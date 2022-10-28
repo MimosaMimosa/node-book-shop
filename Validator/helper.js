@@ -1,5 +1,3 @@
-const e = require("express");
-
 exports.ErrorBag = async (req, next, schema) => {
 	try {
 		const data = { ...req.body };

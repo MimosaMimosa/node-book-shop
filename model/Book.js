@@ -1,4 +1,6 @@
+const { query } = require("express");
 const mongoose = require("mongoose");
+const { queryPaginate } = require("./helper/static");
 const { Schema } = mongoose;
 
 const Collection = new Schema(
@@ -18,30 +20,9 @@ const Collection = new Schema(
 	{ timestamps: true }
 );
 
-Collection.statics.paginate = async function (req) {
-	const filter = {}
-		const category = req.query.category;
-		const author = req.query.author;
+Collection.statics.query = query;
 
-		if (category) {
-			req.query.category = category;
-		}
-
-		if (author) {
-			req.query.author = author;
-		}
-		
-	const page = parseInt(req.query.page ?? 1);
-	const limit = parseInt(req.query.limit ?? 10);
-	const skip = limit * (page - 1);
-	const count = await this.find(filter).count();
-	const totalPage = Math.ceil(count / limit);
-	req.totalPage = totalPage;
-	return this.find(filter)
-		.skip(skip)
-		.limit(limit)
-		.populate("author", ["name", "_id"].join(" "));
-};
+Collection.statics.queryPaginate = queryPaginate;
 
 const Book = mongoose.model("Book", Collection);
 
