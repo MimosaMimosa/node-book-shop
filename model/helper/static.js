@@ -1,4 +1,4 @@
-exports.queryPaginate = async function (wanted) {
+exports.queryPaginate = async function (wanted, config = []) {
 	const req = request();
 	const page = parseInt(req.query.page ?? 1);
 	const limit = parseInt(wanted ?? req.query.limit ?? 10);
@@ -9,10 +9,7 @@ exports.queryPaginate = async function (wanted) {
 	const totalPage = Math.ceil(count / limit);
 	req.totalPage = totalPage;
 
-	return this.find(query)
-		.skip(skip)
-		.limit(limit)
-		.populate("author", ["name", "_id"].join(" "));
+	return this.find(query).skip(skip).limit(limit).populate(config);
 };
 
 exports.query = function () {

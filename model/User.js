@@ -5,7 +5,6 @@ const { Schema } = mongoose;
 const Collection = new Schema(
     {
         name: { type: String, required: true, max: 50 },
-        name_and_surname: { type: String, required: true, max: 50 },
         email: { type: String, required: true, unique: true },
         phone: { type: String, required: true, max: 11 },
         role: { type: String, default: 1 },

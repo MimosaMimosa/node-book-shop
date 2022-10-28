@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
 
 module.exports = async () => {
-    await mongoose.connect('mongodb://localhost:27017/book-shop');
+    await mongoose.connect(process.env.DB_PORT);
 };

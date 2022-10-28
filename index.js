@@ -4,12 +4,11 @@ const connectDB = require("./database");
 const fileupload = require("express-fileupload");
 const cors = require("cors");
 const { registerClient, registerAdmin } = require("./routes/helper");
+const imageRouter = require('./routes/image/image')
 dotenv.config();
 const app = express();
 
-app.get(/(upload).*/, (req, res) => {
-	res.sendFile(__dirname + req.url);
-});
+
 
 //golbal helper
 app.use((req, res, next) => {
@@ -27,13 +26,14 @@ app.use(express.json());
  */
 registerClient(app);
 registerAdmin(app);
+app.use(imageRouter)
 
 app.use((error, req, res, next) => {
 	if (error) {
-		console.log(error);
 		error.status = error.status ?? 500;
 		error.success = error.success ?? false;
 		error.message = error.message ?? "Sever Error!";
+		console.log(error)
 		return res.status(error.status).json(error.data ?? error);
 	}
 });

@@ -7,7 +7,6 @@ exports.storeRequest = async (req, res, next) => {
 		name: Joi.string().max(50).required(),
 		address: Joi.string().max(100).required(),
 		country: Joi.string().max(50).required(),
-		name_and_surname: Joi.string().max(50).required(),
 		image: Joi.string()
 			.valid(
 				"image/jpeg",
