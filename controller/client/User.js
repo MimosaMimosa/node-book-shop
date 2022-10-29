@@ -1,12 +1,23 @@
+const { mail } = require("../../mail/mailer");
 const User = require("../../model/User");
 exports.create = async (req, res, next) => {
-	req.body.image = { url: req.image.path, name: req.image.name };
+	if (req.image) {
+		req.body.image = { url: req.image.path, name: req.image.name };
+	}
 	const data = req.body;
 	try {
 		const user = new User(data);
 		await user.save();
 		delete user._doc.password;
-	 	res.status(200).json(user);
+		mail({
+			from: '"Fred Foo 👻" <foo@example.com>',
+			to: user.email,
+			subject: "Hello ✔",
+			text: "Hello world?",
+		}).catch((error) => {
+			console.log(error);
+		});
+		res.status(200).json(user);
 	} catch (error) {
 		next(error);
 	}

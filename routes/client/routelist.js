@@ -3,6 +3,7 @@ const books = require('./book');
 const users = require('./user');
 const auth = require('./auth');
 const categories = require('./category');
+const token = require('./token');
 
 module.exports = {
     authors,
@@ -10,4 +11,5 @@ module.exports = {
     users,
     auth,
     categories,
+    token
 };

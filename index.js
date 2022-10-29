@@ -8,7 +8,9 @@ const imageRouter = require('./routes/image/image')
 dotenv.config();
 const app = express();
 
-
+global.env = (key) => {
+	return process.env[key]
+}
 
 //golbal helper
 app.use((req, res, next) => {
@@ -33,14 +35,13 @@ app.use((error, req, res, next) => {
 		error.status = error.status ?? 500;
 		error.success = error.success ?? false;
 		error.message = error.message ?? "Sever Error!";
-		console.log(error)
 		return res.status(error.status).json(error.data ?? error);
 	}
 });
 
 connectDB()
 	.then(() => {
-		app.listen(process.env.SERVER_PORT);
+		app.listen(env("SERVER_PORT"));
 	})
 	.catch((error) => {
 		if (error) console.log("database connection error");

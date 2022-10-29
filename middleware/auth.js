@@ -1,20 +1,17 @@
 const jwt = require("jsonwebtoken");
-const User = require("../model/User");
 exports.verifyToken = async (req, res, next) => {
 	const [prefix, token] = req.headers.authorization.split("|");
+	const decoded = jwt.verify(token, process.env.SECRET_CODE);
 	try {
-		if (prefix === process.env.TOKEN_TYPE) {
-			const decoded = jwt.verify(token, process.env.SECRET_CODE);
+		if (prefix === process.env.TOKEN_TYPE && decoded) {
 			req.user = decoded.data;
-			const user = await User.findById(req.user._id);
-			if (user) {
-				return next();
-			}
-			throw Error("Not Found");
+			next();
 		}
-		throw Error("Not Found");
+		throw Error({});
 	} catch (error) {
-		return res.status(422).json({ message: "Invalid Token" });
+		error.status = 422,
+		error.message = 'Invalid Token.'
+		next(error)
 	}
 };
 

@@ -15,7 +15,7 @@ exports.index = async (req, res, next) => {
 		]);
 		return res
 			.status(200)
-			.json({ books, totalPage: req.totalPage, countByDate });
+			.json({ books, totalPage: req.totalPage});
 	} catch (error) {
 		next(error);
 	}

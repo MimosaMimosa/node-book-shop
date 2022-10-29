@@ -5,18 +5,18 @@ exports.storeRequest = async (req, res, next) => {
 	const email = req.body.email;
 	const rule = {
 		name: Joi.string().max(50).required(),
-		address: Joi.string().max(100).required(),
-		country: Joi.string().max(50).required(),
-		image: Joi.string()
-			.valid(
-				"image/jpeg",
-				"image/jpg",
-				"image/gif",
-				"image/png",
-				"image/jfif"
-			)
-			.required(),
-		phone: Joi.string().required().max(11),
+		// address: Joi.string().max(100).required(),
+		// country: Joi.string().max(50).required(),
+		// image: Joi.string()
+		// 	.valid(
+		// 		"image/jpeg",
+		// 		"image/jpg",
+		// 		"image/gif",
+		// 		"image/png",
+		// 		"image/jfif"
+		// 	)
+		// 	.required(),
+		// phone: Joi.string().required().max(11),
 		password: Joi.string().min(6).max(20).required(),
 		email: Joi.string().email().lowercase().required(),
 	};
