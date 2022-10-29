@@ -1,4 +1,5 @@
 const { Router } = require("express");
+const { mail } = require("../../mail/mailer");
 const PasswordReset = require("../../model/PasswordReset");
 const User = require("../../model/User");
 const router = Router();
@@ -9,7 +10,7 @@ router.get("/verify-email/:token", async (req, res, next) => {
 		const token = await PasswordReset.findOne({
 			token: req.params.token,
 			expired_at: {
-				$gte: dayjs().toISOString(),
+				$gt: dayjs().toISOString(),
 			},
 		});
 		await User.findOne({ email: token.email }).updateOne({
@@ -17,7 +18,25 @@ router.get("/verify-email/:token", async (req, res, next) => {
 		});
 		return res
 			.status(200)
-			.json({ success: true, message: "Verified email successfully." });
+			.json({ message: "Verified email successfully." });
+	} catch (error) {
+		next(error);
+	}
+});
+
+router.post("/email-verification", async (req, res, next) => {
+	try {
+		const email = req.body.email;
+		const user = await User.findOne({ email });
+		mail({
+			from: '"Fred Foo 👻" <foo@example.com>',
+			to: user.email,
+			subject: "Hello ✔",
+			text: "Hello world?",
+		});
+		return res.status(200).json({
+			message: "Please check your email for verification link.",
+		});
 	} catch (error) {
 		next(error);
 	}

@@ -1,17 +1,20 @@
 const User = require("../../model/User");
 const { compare } = require("../../utils/bcrypt");
 const jwt = require("jsonwebtoken");
+const { createError } = require("../../utils/error");
 
 const maxAge = 3 * 24 * 60 * 60;
 
 exports.login = async (req, res, next) => {
-	const { email, password } = req.user;
+	const { email, password } = req.body;
 	try {
 		const user = await User.findOne({ email: email });
 		if (!user.email_verify_at) {
-			return res
-				.json(401)
-				.json({ message: "Need to verify your email." });
+			return createError(
+				401,
+				{ message: "Please check your email for verification link." },
+				next
+			);
 		}
 		if (user && compare(password, user.password)) {
 			const { password, ...others } = user._doc;
@@ -25,9 +28,11 @@ exports.login = async (req, res, next) => {
 
 			return res.status(200).json({ user: others, token });
 		}
-		return res
-			.status(422)
-			.json({ message: "Invalid username or password" });
+		return createError(
+			422,
+			{ message: "Invalid username or password." },
+			next
+		);
 	} catch (error) {
 		next(error);
 	}

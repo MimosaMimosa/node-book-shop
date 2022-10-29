@@ -1,11 +1,11 @@
 const nodemailer = require("nodemailer");
-let randomToken = require("random-token");
+const randomToken = require("random-token");
 const PasswordReset = require("../model/PasswordReset");
+const dayjs = require("../utils/dayjs");
 
 exports.mail = async (config) => {
 	const token = randomToken(50);
-	config.html = `<a href="${randomToken(20)}">Token</a>`;
-
+	
 	let transporter = nodemailer.createTransport({
 		service: "gmail",
 		host: "smtp.ethereal.email",
@@ -17,7 +17,19 @@ exports.mail = async (config) => {
 		},
 	});
 
-	let info = await transporter.sendMail(config);
+	await PasswordReset.findOneAndUpdate(
+		{
+			email: config.to,
+		},
+		{
+			expired_at: dayjs().toISOString(),
+		},
+		{
+			sort: {
+				createdAt: -1,
+			},
+		}
+	);
 
 	const passwordReset = new PasswordReset({
 		email: config.to,
@@ -25,6 +37,8 @@ exports.mail = async (config) => {
 	});
 
 	await passwordReset.save();
+
+	let info = await transporter.sendMail(config);
 
 	console.log("Message sent: %s", info.messageId);
 	console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));

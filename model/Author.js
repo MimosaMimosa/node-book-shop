@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const { hash } = require("../utils/bcrypt");
 const { Schema } = mongoose;
+const dayjs = require("../utils/dayjs");
 
 const Collection = new Schema(
 	{
@@ -17,7 +18,7 @@ const Collection = new Schema(
 		address: { type: String, required: true, max: 100 },
 		country: { type: String, required: true, max: 50 },
 	},
-	{ timestamps: true }
+	{ timestamps: { currentTime: () => dayjs().toISOString() } }
 );
 
 Collection.pre("save", function (next) {
@@ -26,7 +27,7 @@ Collection.pre("save", function (next) {
 		author.password = hash(author.password);
 		next();
 	} catch (error) {
-		throw Error(error);
+		next(error);
 	}
 });
 

@@ -1,20 +1,16 @@
-
-const dayjs = require("../utils/dayjs");
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
-
+const dayjs = require("../utils/dayjs");
 const Collection = new Schema(
 	{
 		email: { type: String, required: true },
 		token: { type: String, required: true, max: 50 },
 		expired_at: {
 			type: Date,
-			default: dayjs().add(3, "h").toISOString(),
+			default: dayjs().add(1, "h").toISOString(),
 		},
 	},
-	{
-		timestamps: true,
-	}
+	{ timestamps: { currentTime: () => dayjs().toISOString() } }
 );
 
 const PasswordReset = mongoose.model("PasswordReset", Collection);
