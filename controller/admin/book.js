@@ -13,9 +13,7 @@ exports.index = async (req, res, next) => {
 				select: "name image",
 			},
 		]);
-		return res
-			.status(200)
-			.json({ books, totalPage: req.totalPage});
+		res.status(200).json({ books, totalPage: req.totalPage });
 	} catch (error) {
 		next(error);
 	}

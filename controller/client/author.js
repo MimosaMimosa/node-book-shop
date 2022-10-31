@@ -7,21 +7,16 @@ exports.create = async (req, res, next) => {
 		const author = new Author(data);
 		await author.save();
 		delete author._doc.password;
-		return res.status(200).json(author);
+		return res.status(200).json({ authors });
 	} catch (error) {
 		next(error);
 	}
 };
 
 exports.index = async (req, res, next) => {
-	const page = parseInt(req.query.page ?? 1);
-	const limit = parseInt(req.query.limit ?? 6);
-	const skip = limit * (page - 1);
 	try {
-		const count = await Author.count();
-		const totalPage = Math.ceil(count / limit);
-		const authors = await Author.find().skip(skip).limit(limit);
-		return res.status(200).json({ authors, totalPage });
+		const authors = await Author.find().sort({ _id: -1 }).limit(5);
+		return res.status(200).json({ authors });
 	} catch (error) {
 		next(error);
 	}

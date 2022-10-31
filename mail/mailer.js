@@ -1,11 +1,6 @@
 const nodemailer = require("nodemailer");
-const randomToken = require("random-token");
-const PasswordReset = require("../model/PasswordReset");
-const dayjs = require("../utils/dayjs");
 
 exports.mail = async (config) => {
-	const token = randomToken(50);
-	
 	let transporter = nodemailer.createTransport({
 		service: "gmail",
 		host: "smtp.ethereal.email",
@@ -16,27 +11,6 @@ exports.mail = async (config) => {
 			pass: env("SEND_MAIL_PASSWORD"),
 		},
 	});
-
-	await PasswordReset.findOneAndUpdate(
-		{
-			email: config.to,
-		},
-		{
-			expired_at: dayjs().toISOString(),
-		},
-		{
-			sort: {
-				createdAt: -1,
-			},
-		}
-	);
-
-	const passwordReset = new PasswordReset({
-		email: config.to,
-		token,
-	});
-
-	await passwordReset.save();
 
 	let info = await transporter.sendMail(config);
 

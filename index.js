@@ -36,7 +36,6 @@ app.use((error, req, res, next) => {
 		error.success = error.success ?? false;
 		error.message = error.message ?? "Sever Error!";
 		res.status(error.status).json(error.data ?? error);
-		return;
 	}
 });
 

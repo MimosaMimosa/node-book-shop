@@ -1,4 +1,5 @@
 const { mail } = require("../../mail/mailer");
+const verifyEmail = require("../../mail/service/verifyMail");
 const User = require("../../model/User");
 exports.create = async (req, res, next) => {
 	if (req.image) {
@@ -9,14 +10,7 @@ exports.create = async (req, res, next) => {
 		const user = new User(data);
 		await user.save();
 		delete user._doc.password;
-		mail({
-			from: '"Fred Foo 👻" <foo@example.com>',
-			to: user.email,
-			subject: "Hello ✔",
-			text: "Hello world?",
-		}).catch((error) => {
-			console.log(error);
-		});
+		verifyEmail(user.email);
 		res.status(200).json(user);
 	} catch (error) {
 		next(error);

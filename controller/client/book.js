@@ -28,8 +28,8 @@ exports.index = async (req, res, next) => {
 		const books = await Book.find(search)
 			.sort({ _id: -1 })
 			.populate("author")
-			.limit(8);
-		return res.status(200).json(books);
+			.limit(req.query.limit || 10);
+		return res.status(200).json({ books });
 	} catch (error) {
 		next(error);
 	}
@@ -38,7 +38,7 @@ exports.index = async (req, res, next) => {
 exports.show = async (req, res, next) => {
 	try {
 		const book = await Book.findById(req.params.id).populate("author");
-		return res.status(200).json(book);
+		return res.status(200).json({ book });
 	} catch (error) {
 		next(error);
 	}
