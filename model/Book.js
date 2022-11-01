@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const { queryPaginate, query } = require("./helper/static");
-const dayjs = require("../utils/dayjs");
 const { Schema } = mongoose;
 
 const Collection = new Schema(
@@ -17,12 +16,8 @@ const Collection = new Schema(
 		price: { type: Number, default: null },
 		description: { type: String, max: 255 },
 	},
-	{ timestamps: { currentTime: () => dayjs().toISOString() } }
+	{ timestamps: true }
 );
-
-Collection.statics.query = query;
-
-Collection.statics.queryPaginate = queryPaginate;
 
 const Book = mongoose.model("Book", Collection);
 

@@ -10,7 +10,7 @@ const Collection = new Schema(
 			default: dayjs().add(1, "h").toISOString(),
 		},
 	},
-	{ timestamps: { currentTime: () => dayjs().toISOString() } }
+	{ timestamps:true }
 );
 
 const PasswordReset = mongoose.model("PasswordReset", Collection);
