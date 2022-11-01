@@ -22,7 +22,7 @@ exports.index = async (req, res, next) => {
 				},
 			},
 		]);
-		return res.status(200).json({ lastSevenDayBooks });
+		res.status(200).json({ lastSevenDayBooks });
 	} catch (error) {
 		next(error);
 	}

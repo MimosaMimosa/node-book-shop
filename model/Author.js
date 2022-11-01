@@ -23,8 +23,7 @@ const Collection = new Schema(
 
 Collection.pre("save", function (next) {
 	try {
-		const author = this;
-		author.password = hash(author.password);
+		this.password = hash(this.password);
 		next();
 	} catch (error) {
 		next(error);

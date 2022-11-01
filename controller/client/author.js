@@ -7,7 +7,7 @@ exports.create = async (req, res, next) => {
 		const author = new Author(data);
 		await author.save();
 		delete author._doc.password;
-		return res.status(200).json({ authors });
+		res.status(200).json({ authors });
 	} catch (error) {
 		next(error);
 	}
@@ -16,7 +16,7 @@ exports.create = async (req, res, next) => {
 exports.index = async (req, res, next) => {
 	try {
 		const authors = await Author.find().sort({ _id: -1 }).limit(5);
-		return res.status(200).json({ authors });
+		res.status(200).json({ authors });
 	} catch (error) {
 		next(error);
 	}

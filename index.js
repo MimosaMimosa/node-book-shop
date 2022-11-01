@@ -8,9 +8,7 @@ const imageRouter = require("./routes/image/image");
 dotenv.config();
 const app = express();
 
-global.env = (key) => {
-	return process.env[key];
-};
+global.env = (key) => process.env[key];
 
 //golbal helper
 app.use((req, res, next) => {
@@ -28,6 +26,7 @@ app.use(express.json());
  */
 registerClient(app);
 registerAdmin(app);
+
 app.use(imageRouter);
 
 app.use((error, req, res, next) => {

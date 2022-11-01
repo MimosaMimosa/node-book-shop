@@ -5,7 +5,7 @@ exports.create = async (req, res, next) => {
 	try {
 		const book = new Book(data);
 		await book.save();
-		return res.status(200).json(book);
+		res.status(200).json(book);
 	} catch (error) {
 		next(error);
 	}
@@ -13,23 +13,11 @@ exports.create = async (req, res, next) => {
 
 exports.index = async (req, res, next) => {
 	try {
-		const search = {};
-		const category = req.query.category;
-		const author = req.query.author;
-
-		if (category) {
-			search.category = category;
-		}
-
-		if (author) {
-			search.author = author;
-		}
-
-		const books = await Book.find(search)
+		const books = await Book.find(Book.query())
 			.sort({ _id: -1 })
 			.populate("author")
-			.limit(req.query.limit || 10);
-		return res.status(200).json({ books });
+			.limit(req.query.limit ?? 10);
+		res.status(200).json({ books });
 	} catch (error) {
 		next(error);
 	}

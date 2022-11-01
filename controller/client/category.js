@@ -4,7 +4,7 @@ exports.create = async (req, res, next) => {
 	try {
 		const category = new Category(req.body);
 		await category.save();
-		return res.status(200).json({ category });
+		res.status(200).json({ category });
 	} catch (error) {
 		next(error);
 	}
@@ -13,7 +13,7 @@ exports.create = async (req, res, next) => {
 exports.index = async (req, res, next) => {
 	try {
 		const categories = await Category.find().sort({ _id: -1 });
-		return res.status(200).json({ categories });
+		res.status(200).json({ categories });
 	} catch (error) {
 		next(error);
 	}

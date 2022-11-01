@@ -12,8 +12,13 @@ exports.queryPaginate = async function (wanted, config = []) {
 	return this.find(query).skip(skip).limit(limit).populate(config);
 };
 
-exports.query = function () {
-	const fields = ["name", "category", "author", "price"];
+/**
+ * 
+ * @param {Array} custom 
+ * @returns {Object}
+ */
+exports.query = function (custom) {
+	const fields = custom ?? ["name", "category", "author", "price"];
 	const query = {};
 	fields.forEach((field) => {
 		if (request().query[field]) {

@@ -8,7 +8,7 @@ const maxAge = 3 * 24 * 60 * 60;
 exports.login = async (req, res, next) => {
 	const { email, password } = req.body;
 	try {
-		const user = await User.findOne({ email: email });
+		const user = await User.findOne({ email });
 		if (!user.email_verify_at) {
 			return createError(
 				401,
@@ -26,7 +26,7 @@ exports.login = async (req, res, next) => {
 				{ expiresIn: maxAge }
 			);
 			others.token = token;
-			
+
 			return res.status(200).json({ user: others });
 		}
 		return createError(

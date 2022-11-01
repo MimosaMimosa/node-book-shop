@@ -15,10 +15,10 @@ router.get("/verify-email/:token", async (req, res, next) => {
 			},
 		}).sort({ _id: -1 });
 
-		if (!verify.token === req.params.token) {
+		if (verify.token !== req.params.token) {
 			return createError(422, { message: "Invalid Token" }, next);
 		}
-		
+
 		await User.findOne({ email: token.email }).updateOne({
 			email_verify_at: dayjs().toISOString(),
 		});
@@ -38,7 +38,7 @@ router.post("/email-verification", async (req, res, next) => {
 			subject: "Hello ✔",
 			text: "Hello world?",
 		});
-		return res.status(200).json({
+		res.status(200).json({
 			message: "Please check your email for verification link.",
 		});
 	} catch (error) {

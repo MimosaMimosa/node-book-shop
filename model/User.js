@@ -25,8 +25,7 @@ const Collection = new Schema(
 
 Collection.pre("save", function (next) {
 	try {
-		const user = this;
-		user.password = hash(user.password);
+		this.password = hash(this.password);
 		next();
 	} catch (error) {
 		next(error);
