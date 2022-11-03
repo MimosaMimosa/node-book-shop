@@ -32,11 +32,12 @@ app.use(imageRouter);
 
 app.use((error, req, res, next) => {
 	if (error) {
-		error.status = error.status ?? 500;
-		error.success = error.success ?? false;
-		error.message = error.message ?? "Sever Error!";
-		// console.log(error)
-		res.status(error.status).json(error.data ?? error);
+		const createError = {}
+		createError.message = error.message ?? "Sever Error!";
+		createError.status = error.status ?? 500;
+		createError.success = error.success ?? false;
+		createError.stack = error.stack ?? 'unknown error'
+		res.status(createError.status).json(error.data ?? createError);
 	}
 });
 

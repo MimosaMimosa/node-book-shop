@@ -25,7 +25,7 @@ exports.index = async (req, res, next) => {
 	try {
 		const count = await Author.count();
 		const totalPage = Math.ceil(count / limit);
-		const authors = await Author.find().skip(skip).limit(limit);
+		const authors = await Author.find().skip(skip).limit(limit).exec();
 		return res.status(200).json({ authors, totalPage });
 	} catch (error) {
 		next(error);
@@ -36,7 +36,8 @@ exports.show = async (req, res, next) => {
 	try {
 		const author = await Author.findById(req.params.id).select(
 			"-password -createdAt -updatedAt -__v"
-		);
+		).exec();
+
 		res.status(200).json({ author });
 	} catch (error) {
 		next(error);
@@ -55,7 +56,7 @@ exports.update = async (req, res, next) => {
 			}
 		}
 		const author = await Author.findByIdAndUpdate(req.params.id, data);
-		fs.unlinkSync(path.join(__basedir, author.image.url));
+		req.image && fs.unlinkSync(path.join(__basedir, author.image.url));
 		res.status(200).json({
 			message: "Author updated successfully",
 		});

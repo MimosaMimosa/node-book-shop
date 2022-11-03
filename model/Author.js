@@ -1,16 +1,23 @@
 const mongoose = require("mongoose");
 const { hash } = require("../utils/bcrypt");
 const { Schema } = mongoose;
-
+const  path  = require("path");
 const Collection = new Schema(
 	{
 		name: { type: String, required: true, max: 50 },
-		email: { type: String, unique: true, required: true,  },
+		email: { type: String, unique: true, required: true },
 		phone: { type: String, required: true, max: 11 },
 		date_of_birth: { type: Date, required: true },
 		image: {
-			url: { type: String, default: null },
-			name: { type: String, default: null },
+			url: {
+				type: String,
+				default: null,
+				get: (url) => path.join(process.env.APP_URL, url),
+			},
+			name: {
+				type: String,
+				default: null,
+			},
 		},
 		password: {
 			type: String,
@@ -20,7 +27,12 @@ const Collection = new Schema(
 		address: { type: String, required: true, max: 100 },
 		country: { type: String, required: true, max: 50 },
 	},
-	{ timestamps: true }
+	{
+		timestamps: true,
+		toObject: { getters: true, setters: true },
+		toJSON: { getters: true, setters: true },
+		runSettersOnQuery: true,
+	}
 );
 
 Collection.pre("save", function (next) {
