@@ -13,7 +13,7 @@ exports.create = async (req, res, next) => {
 
 exports.index = async (req, res, next) => {
 	try {
-		const books = await Book.find(Book.query())
+		const books = await Book.find()
 			.sort({ _id: -1 })
 			.populate("author")
 			.limit(req.query.limit ?? 10);

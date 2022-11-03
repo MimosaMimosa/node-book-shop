@@ -7,7 +7,7 @@ exports.create = async (req, res, next) => {
 		const author = new Author(data);
 		await author.save();
 		delete author._doc.password;
-		res.status(200).json({ authors });
+		res.status(200).json({ author });
 	} catch (error) {
 		next(error);
 	}

@@ -9,6 +9,7 @@ dotenv.config();
 const app = express();
 
 global.env = (key) => process.env[key];
+global.__basedir = __dirname
 
 //golbal helper
 app.use((req, res, next) => {
@@ -34,6 +35,7 @@ app.use((error, req, res, next) => {
 		error.status = error.status ?? 500;
 		error.success = error.success ?? false;
 		error.message = error.message ?? "Sever Error!";
+		// console.log(error)
 		res.status(error.status).json(error.data ?? error);
 	}
 });

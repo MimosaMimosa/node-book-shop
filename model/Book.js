@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const { queryPaginate, query } = require("./helper/static");
 const { Schema } = mongoose;
 
 const Collection = new Schema(
