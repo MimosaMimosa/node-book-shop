@@ -9,7 +9,7 @@ dotenv.config();
 const app = express();
 
 global.env = (key) => process.env[key];
-global.__basedir = __dirname
+global.__basedir = __dirname;
 
 //golbal helper
 app.use((req, res, next) => {
@@ -32,11 +32,11 @@ app.use(imageRouter);
 
 app.use((error, req, res, next) => {
 	if (error) {
-		const createError = {}
+		const createError = {};
 		createError.message = error.message ?? "Sever Error!";
 		createError.status = error.status ?? 500;
 		createError.success = error.success ?? false;
-		createError.stack = error.stack ?? 'unknown error'
+		createError.stack = error.stack ?? "unknown error";
 		res.status(createError.status).json(error.data ?? createError);
 	}
 });

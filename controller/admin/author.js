@@ -3,7 +3,7 @@ const fs = require("fs");
 const path = require("path");
 
 exports.store = async (req, res, next) => {
-	req.body.image = { url: req.image.path, name: req.image.name };
+
 	const data = req.body;
 	try {
 		const author = new Author(data);
@@ -34,9 +34,9 @@ exports.index = async (req, res, next) => {
 
 exports.show = async (req, res, next) => {
 	try {
-		const author = await Author.findById(req.params.id).select(
-			"-password -createdAt -updatedAt -__v"
-		).exec();
+		const author = await Author.findById(req.params.id)
+			.select("-password -createdAt -updatedAt -__v")
+			.exec();
 
 		res.status(200).json({ author });
 	} catch (error) {
@@ -56,7 +56,7 @@ exports.update = async (req, res, next) => {
 			}
 		}
 		const author = await Author.findByIdAndUpdate(req.params.id, data);
-		req.image && fs.unlinkSync(path.join(__basedir, author.image.url));
+		req.image && fs.unlinkSync(path.join(__basedir, author.image.path));
 		res.status(200).json({
 			message: "Author updated successfully",
 		});
@@ -68,7 +68,7 @@ exports.update = async (req, res, next) => {
 exports.destroy = async (req, res, next) => {
 	try {
 		const author = await Author.findByIdAndDelete(req.params.id);
-		fs.unlinkSync(path.join(__basedir, author.image.url));
+		fs.unlinkSync(path.join(__basedir, author.image.path));
 		res.status(200).json({ message: "Deleted author successfully" });
 	} catch (error) {
 		error.message = "Deleting author failed";

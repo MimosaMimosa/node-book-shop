@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 const { hash } = require("../utils/bcrypt");
 const { Schema } = mongoose;
-const  path  = require("path");
 const Collection = new Schema(
 	{
 		name: { type: String, required: true, max: 50 },
@@ -12,9 +11,13 @@ const Collection = new Schema(
 			url: {
 				type: String,
 				default: null,
-				get: (url) => path.join(process.env.APP_URL, url),
+				get: (url) => env("APP_URL") + "/" + url,
 			},
 			name: {
+				type: String,
+				default: null,
+			},
+			path: {
 				type: String,
 				default: null,
 			},
@@ -37,6 +40,11 @@ const Collection = new Schema(
 
 Collection.pre("save", function (next) {
 	try {
+		this.image = {
+			url: request().image.path,
+			name: request().image.name,
+			path: request().image.path,
+		};
 		this.password = hash(this.password);
 		next();
 	} catch (error) {
