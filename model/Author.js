@@ -11,7 +11,7 @@ const Collection = new Schema(
 			url: {
 				type: String,
 				default: null,
-				get: (url) => env("APP_URL") + "/" + url,
+				get: (url) => global.env("APP_URL") + url,
 			},
 			name: {
 				type: String,
@@ -20,12 +20,14 @@ const Collection = new Schema(
 			path: {
 				type: String,
 				default: null,
+				get: (path) => path.substr(1),
 			},
 		},
 		password: {
 			type: String,
 			required: true,
 			max: 50,
+			select: false,
 		},
 		address: { type: String, required: true, max: 100 },
 		country: { type: String, required: true, max: 50 },
@@ -40,10 +42,11 @@ const Collection = new Schema(
 
 Collection.pre("save", function (next) {
 	try {
+		const request = global.request();
 		this.image = {
-			url: request().image.path,
-			name: request().image.name,
-			path: request().image.path,
+			url: request.image.path,
+			name: request.image.name,
+			path: request.image.path,
 		};
 		this.password = hash(this.password);
 		next();
@@ -52,9 +55,24 @@ Collection.pre("save", function (next) {
 	}
 });
 
-Collection.pre("updateOne", function (next) {
+Collection.pre("findOneAndUpdate", function (next) {
 	try {
-		this.password = hash(this.password);
+		const request = global.request();
+		this._update = {};
+		if (request.image) {
+			request.body.image = {
+				url: request.image.path,
+				name: request.image.name,
+			};
+		}
+		for (let key in request.body) {
+			if (request.body[key]) {
+				this._update[key] = request.body[key];
+			}
+		}
+		if (this._update.password) {
+			this._update.password = hash(this._update.password);
+		}
 		next();
 	} catch (error) {
 		next(error);

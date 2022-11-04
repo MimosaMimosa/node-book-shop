@@ -12,7 +12,7 @@ const { uploadImage } = require("../../utils/upload");
 router.get("/", index);
 router.delete("/:id", destroy);
 router.get("/:id", show);
-router.post("/", storeRequest, uploadImage("upload/authors/"), store);
-router.post("/:id", updateRequest, uploadImage("upload/authors/"), update);
+router.post("/", storeRequest, uploadImage("upload.authors"), store);
+router.post("/:id", updateRequest, uploadImage("upload.authors"), update);
 
 module.exports = router;

@@ -3,12 +3,10 @@ const fs = require("fs");
 const path = require("path");
 
 exports.store = async (req, res, next) => {
-
-	const data = req.body;
+	const author = new Author(req.body);
 	try {
-		const author = new Author(data);
 		await author.save();
-		delete author._doc.password;
+		req.mv();
 		res.status(200).json({
 			author,
 			message: "Created author successfully",
@@ -43,20 +41,19 @@ exports.show = async (req, res, next) => {
 		next(error);
 	}
 };
-
+/**
+ * data prepare in pre update hook
+ * @param {*} req
+ * @param {*} res
+ * @param {*} next
+ */
 exports.update = async (req, res, next) => {
 	try {
+		const author = await Author.findByIdAndUpdate(req.params.id).exec();
 		if (req.image) {
-			req.body.image = { url: req.image.path, name: req.image.name };
+			fs.unlinkSync(path.join(__basedir, author.image.path));
+			req.mv();
 		}
-		const data = {};
-		for (let key in req.body) {
-			if (req.body[key]) {
-				data[key] = req.body[key];
-			}
-		}
-		const author = await Author.findByIdAndUpdate(req.params.id, data);
-		req.image && fs.unlinkSync(path.join(__basedir, author.image.path));
 		res.status(200).json({
 			message: "Author updated successfully",
 		});
@@ -67,7 +64,7 @@ exports.update = async (req, res, next) => {
 
 exports.destroy = async (req, res, next) => {
 	try {
-		const author = await Author.findByIdAndDelete(req.params.id);
+		const author = await Author.findByIdAndDelete(req.params.id).exec();
 		fs.unlinkSync(path.join(__basedir, author.image.path));
 		res.status(200).json({ message: "Deleted author successfully" });
 	} catch (error) {

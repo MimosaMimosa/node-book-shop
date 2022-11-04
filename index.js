@@ -37,6 +37,7 @@ app.use((error, req, res, next) => {
 		createError.status = error.status ?? 500;
 		createError.success = error.success ?? false;
 		createError.stack = error.stack ?? "unknown error";
+		console.log(error)
 		res.status(createError.status).json(error.data ?? createError);
 	}
 });
