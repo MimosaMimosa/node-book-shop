@@ -63,6 +63,7 @@ Collection.pre("findOneAndUpdate", function (next) {
 			request.body.image = {
 				url: request.image.path,
 				name: request.image.name,
+				path: request.image.path,
 			};
 		}
 		for (let key in request.body) {

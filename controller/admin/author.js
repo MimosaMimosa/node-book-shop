@@ -3,16 +3,22 @@ const fs = require("fs");
 const path = require("path");
 
 exports.store = async (req, res, next) => {
-	const author = new Author(req.body);
+	const session = await Author.startSession();
+	session.startTransaction();
 	try {
+		const author = new Author(req.body);
 		await author.save();
 		req.mv();
+		await session.commitTransaction();
 		res.status(200).json({
 			author,
 			message: "Created author successfully",
 		});
 	} catch (error) {
+		await session.abortTransaction();
 		next(error);
+	} finally {
+		session.endSession();
 	}
 };
 
@@ -48,27 +54,39 @@ exports.show = async (req, res, next) => {
  * @param {*} next
  */
 exports.update = async (req, res, next) => {
+	const session = await Author.startSession();
+	session.startTransaction();
 	try {
 		const author = await Author.findByIdAndUpdate(req.params.id).exec();
 		if (req.image) {
 			fs.unlinkSync(path.join(__basedir, author.image.path));
 			req.mv();
 		}
+
 		res.status(200).json({
 			message: "Author updated successfully",
 		});
 	} catch (error) {
+		await session.abortTransaction();
 		next(error);
+	} finally {
+		session.endSession();
 	}
 };
 
 exports.destroy = async (req, res, next) => {
+	const session = await Author.startSession();
+	session.startTransaction();
 	try {
 		const author = await Author.findByIdAndDelete(req.params.id).exec();
 		fs.unlinkSync(path.join(__basedir, author.image.path));
+		await session.commitTransaction();
 		res.status(200).json({ message: "Deleted author successfully" });
 	} catch (error) {
 		error.message = "Deleting author failed";
+		await session.abortTransaction();
 		next(error);
+	} finally {
+		session.endSession();
 	}
 };
