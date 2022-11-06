@@ -1,7 +1,7 @@
 const Joi = require('joi');
 const { ErrorBag, file } = require('./helper');
 
-exports.storeRequest = async (req, res, next) => {
+exports.storeRequest = (req, res, next) => {
     const rule = {
         name: Joi.string().max(50).required(),
         price: Joi.number().required(),
