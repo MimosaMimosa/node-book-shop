@@ -2,3 +2,5 @@ node_modules
 upload/images/
 upload/users/
 upload/authors/
+upload/image/
+.vscode
