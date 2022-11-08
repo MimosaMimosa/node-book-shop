@@ -4,3 +4,4 @@ upload/users/
 upload/authors/
 upload/image/
 .vscode
+.env

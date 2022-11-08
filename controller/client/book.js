@@ -1,4 +1,4 @@
-const Book = require('../../model/book');
+const Book = require('../../model/Book');
 exports.create = async (req, res, next) => {
     req.body.image = { url: req.image.path, name: req.image.name };
     const session = await Book.startSession();

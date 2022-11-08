@@ -6,7 +6,7 @@ const { uploadImage } = require('../../utils/upload');
 const { storeRequest } = require('../../Validator/book');
 
 router.get('/', index);
-router.post('/', storeRequest, uploadImage('upload.images.'), create);
+router.post('/', storeRequest, uploadImage('upload.images'), create);
 router.get('/:id', verifyToken, show);
 
 module.exports = router;

@@ -14,12 +14,13 @@ const Collection = new Schema(
 			type: String,
 			required: true,
 			max: 50,
+			select:false,
 		},
 		email_verify_at: { type: Date, default: null },
 		address: { type: String, default: null, max: 100 },
 		country: { type: String, default: null, max: 50 },
 	},
-	{ timestamps:true }
+	{ timestamps: true }
 );
 
 Collection.pre("save", function (next) {
