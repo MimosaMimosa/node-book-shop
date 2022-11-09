@@ -1,11 +1,11 @@
 const Book = require('../../model/Book');
+const { calculatePaginate, usePagination } = require('../../utils/helper');
 exports.create = async (req, res, next) => {
-    req.body.image = { url: req.image.path, name: req.image.name };
     const session = await Book.startSession();
     session.startTransaction();
     try {
-        const book = new Book(req.body);
-        await book.save();
+        const data = Book.prepareStore(req);
+        const book = await Book.create([data], { session });
         req.mv();
         await session.commitTransaction();
         res.status(200).json(book);
@@ -19,12 +19,17 @@ exports.create = async (req, res, next) => {
 
 exports.index = async (req, res, next) => {
     try {
+        const [currentPage, skip, limit] = calculatePaginate();
+        const total = await Book.find().count().exec();
+        const totalPage = Math.ceil(total / limit);
+        const pagination = usePagination(total, currentPage);
         const books = await Book.find()
             .sort({ _id: -1 })
             .populate('author')
-            .limit(req.query.limit ?? 10)
+            .skip(skip)
+            .limit(limit)
             .exec();
-        res.status(200).json({ books });
+        res.status(200).json({ books, totalPage, currentPage, pagination });
     } catch (error) {
         next(error);
     }
@@ -35,7 +40,7 @@ exports.show = async (req, res, next) => {
         const book = await Book.findById(req.params.id)
             .populate('author')
             .exec();
-        return res.status(200).json({ book });
+        res.status(200).json({ book });
     } catch (error) {
         next(error);
     }
