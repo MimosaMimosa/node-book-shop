@@ -1,29 +1,35 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
+const image = new Schema(
+	{
+		url: {
+			type: String,
+			default: null,
+			get: (url) => global.env("APP_URL") + url,
+		},
+		name: {
+			type: String,
+			default: null,
+		},
+		path: {
+			type: String,
+			default: null,
+			get: (path) => path.substr(1),
+		},
+	},
+	{
+		toObject: { getters: true, setters: true },
+		toJSON: { getters: true, setters: true },
+	}
+);
+
 const Collection = new Schema(
 	{
 		name: { type: String, required: true, max: 100 },
 		author: { type: Schema.Types.ObjectId, ref: "Author" },
 		published_at: { type: Date, default: null },
-		image: [
-			{
-				url: {
-					type: String,
-					default: null,
-					get: (url) => global.env("APP_URL") + url,
-				},
-				name: {
-					type: String,
-					default: null,
-				},
-				path: {
-					type: String,
-					default: null,
-					get: (path) => path.substr(1),
-				},
-			},
-		],
+		image: [image],
 		link: {
 			url: { type: String, default: null },
 			name: { type: String, default: null },
@@ -44,8 +50,8 @@ Collection.statics.prepareUpdate = (req) => {
 	const { image, ...data } = req.body;
 	if (req.image) {
 		data.image = {
-			url: req.image.url,
-			path: req.image.url,
+			url: req.image.path,
+			path: req.image.path,
 			name: req.image.name,
 		};
 	}

@@ -63,7 +63,10 @@ exports.update = async (req, res, next) => {
 			{ session }
 		).exec();
 		if (req.image) {
-			fs.unlinkSync(path.join(__basedir, author.image.path));
+			const imageDir = path.join(__basedir, author.image.path);
+			if (fs.existsSync(imageDir)) {
+				fs.unlinkSync(path.join(__basedir, author.image.path));
+			}
 			req.mv();
 		}
 		await session.commitTransaction();
@@ -85,7 +88,12 @@ exports.destroy = async (req, res, next) => {
 		const author = await Author.findByIdAndDelete(req.params.id, {
 			session,
 		}).exec();
-		fs.unlinkSync(path.join(__basedir, author.image.path));
+
+		const imageDir = path.join(__basedir, author.image.path);
+		if (fs.existsSync(imageDir)) {
+			fs.unlinkSync(imageDir);
+		}
+
 		await session.commitTransaction();
 		res.status(200).json({ message: "Deleted author successfully" });
 	} catch (error) {

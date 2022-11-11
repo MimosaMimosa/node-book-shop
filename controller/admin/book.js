@@ -49,7 +49,20 @@ exports.store = async (req, res, next) => {
 
 exports.show = async (req, res, next) => {
 	try {
-		const book = Book.findById(req.params.id).exec();
+		const book = await Book.findById(req.params.id)
+			.populate([
+				{
+					path: "category",
+					model: "Category",
+					select: "_id",
+				},
+				{
+					path: "author",
+					model: "Author",
+					select: "_id",
+				},
+			])
+			.exec();
 		res.json({ book });
 	} catch (error) {
 		next(error);
@@ -61,11 +74,9 @@ exports.update = async (req, res, next) => {
 	session.startTransaction();
 	try {
 		const data = Book.prepareUpdate(req);
-		const book = await Book.findByIdAndUpdate(
-			req.params.id,
-			{ data },
-			{ session }
-		).exec();
+		const book = await Book.findByIdAndUpdate(req.params.id, data, {
+			session,
+		}).exec();
 		if (req.image) {
 			req.mv();
 			book.image.forEach((image) => {
@@ -73,7 +84,7 @@ exports.update = async (req, res, next) => {
 			});
 		}
 		await session.commitTransaction();
-		res.join({ message: "The book is updated successfully." });
+		res.status(200).json({ message: "The book is updated successfully." });
 	} catch (error) {
 		await session.abortTransaction();
 		next(error);

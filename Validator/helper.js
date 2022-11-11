@@ -45,8 +45,9 @@ exports.unique = async ({ modal, unique, ignore, rule }) => {
 
 exports.file = ({ type, key, rule }) => {
 	const request = global.request();
+	request.validateBody[key] = '';
 	if (type === "image") {
-		request.validateBody[key] = request.files?.image?.mimetype ?? "";
+		request.validateBody[key] = request.files?.[key]?.mimetype ?? "";
 		return rule;
 	}
 };
