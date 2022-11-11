@@ -28,7 +28,31 @@ if you want data persist next time
 run-rs -v 6.0.0 --keep
 ```
 
-Run Project
+When mongodb is started,you will see:
+
+Purging database...
+Running 'C:\Users\Asus\AppData\Roaming\npm\node_modules\run-rs\6.0.0\mongod.exe' [ 27017, 27018, 27019 ]
+Starting replica set...
+Started replica set on "mongodb://DESKTOP-OUSQB3M:27017,DESKTOP-OUSQB3M:27018,DESKTOP-OUSQB3M:27019?replicaSet=rs"
+
+# Environment setup
+
+```
+SERVER_PORT=4000
+SECRET_CODE=$4785431548
+TOKEN_TYPE=$1
+APP_URL=http://localhost:4000
+DB_PORT=mongodb://WAIYANLIN-PC:27017,WAIYANLIN-PC:27018,WAIYANLIN-PC:27019?replicaSet=rs
+TIME_ZONE=Aisa/Yangon
+
+MAIL_SERVICE=gmail
+SEND_MAIL=bookshoptesting@gmail.com
+SEND_MAIL_PASSWORD=riineoxdvqilwyly
+MAIL_PORT=587
+HOST=smtp.ethereal.email
+```
+
+Run Project:
 
 ```
 npm run dev
@@ -46,4 +70,6 @@ You will see server is running at <http:/localhost:4000>
 -   Elegant mongodb object modeling for node.js [mongoose](https://mongoosejs.com/)
 -   Hashing [bcryptjs.](bcryptjs)
 -   Auth Token [jsonwebtoken.](https://www.npmjs.com/package/jsonwebtoken)
--   MongoDB runner[run-s](https://www.npmjs.com/package/run-rs)
+-   MongoDB runner [run-s](https://www.npmjs.com/package/run-rs)
+-   Date library is Day.js[Fast 2kB alternative to Moment.js with the same modern API
+    ](https://day.js.org/)
