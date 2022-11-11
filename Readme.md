@@ -33,7 +33,7 @@ When mongodb is started,you will see:
 Purging database...
 Running 'C:\Users\Asus\AppData\Roaming\npm\node_modules\run-rs\6.0.0\mongod.exe' [ 27017, 27018, 27019 ]
 Starting replica set...
-Started replica set on "mongodb://DESKTOP-OUSQB3M:27017,DESKTOP-OUSQB3M:27018,DESKTOP-OUSQB3M:27019?replicaSet=rs"
+Started replica set on **_mongodb://DESKTOP-OUSQB3M:27017,DESKTOP-OUSQB3M:27018,DESKTOP-OUSQB3M:27019?replicaSet=rs_**
 
 # Environment setup
 
