@@ -9,6 +9,7 @@ const {
 const { updateRequest, storeRequest } = require('../../Validator/author');
 const router = Router();
 const { uploadImage } = require('../../utils/upload');
+
 router.get('/', index);
 router.delete('/:id', destroy);
 router.get('/:id', show);

@@ -5,7 +5,7 @@ const path = require("path");
 const mongoose = require("mongoose");
 exports.index = async (req, res, next) => {
 	try {
-		const [currentPage, skip, limit] = calculatePaginate();
+		const [currentPage, skip, limit] = calculatePaginate(req);
 		const total = await Book.find().count().exec();
 		const totalPage = Math.ceil(total / limit);
 		const books = await Book.find()

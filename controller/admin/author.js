@@ -2,12 +2,26 @@ const Author = require("../../model/Author");
 const fs = require("fs");
 const path = require("path");
 const mongoose = require("mongoose");
+const { calculatePaginate } = require("../../utils/helper");
+
+exports.index = async (req, res, next) => {
+	const [currentPage, skip, limit] = calculatePaginate(req);
+	try {
+		const count = await Author.count();
+		const totalPage = Math.ceil(count / limit);
+		const authors = await Author.find().skip(skip).limit(limit).exec();
+		return res.status(200).json({ authors, totalPage, currentPage });
+	} catch (error) {
+		next(error);
+	}
+};
 
 exports.store = async (req, res, next) => {
 	const session = await mongoose.startSession();
 	session.startTransaction();
 	try {
-		const author = await Author.create([req.body], { session });
+		const data = Author.prepareStore(req);
+		const author = await Author.create([data], { session });
 		req.mv();
 		await session.commitTransaction();
 		res.status(200).json({
@@ -22,46 +36,14 @@ exports.store = async (req, res, next) => {
 	}
 };
 
-exports.index = async (req, res, next) => {
-	const page = parseInt(req.query.page ?? 1);
-	const limit = parseInt(req.query.limit ?? 6);
-	const skip = limit * (page - 1);
-	try {
-		const count = await Author.count();
-		const totalPage = Math.ceil(count / limit);
-		const authors = await Author.find().skip(skip).limit(limit).exec();
-		return res.status(200).json({ authors, totalPage });
-	} catch (error) {
-		next(error);
-	}
-};
-
-exports.show = async (req, res, next) => {
-	try {
-		const author = await Author.findById(req.params.id)
-			.select("-password -createdAt -updatedAt -__v")
-			.exec();
-
-		res.status(200).json({ author });
-	} catch (error) {
-		next(error);
-	}
-};
-/**
- * data prepare in pre update hook
- * @param {*} req
- * @param {*} res
- * @param {*} next
- */
 exports.update = async (req, res, next) => {
 	const session = await mongoose.startSession();
 	session.startTransaction();
 	try {
-		const author = await Author.findByIdAndUpdate(
-			req.params.id,
-			{},
-			{ session }
-		).exec();
+		const data = Author.prepareUpdate(req);
+		const author = await Author.findByIdAndUpdate(req.params.id, data, {
+			session,
+		}).exec();
 		if (req.image) {
 			const imageDir = path.join(__basedir, author.image.path);
 			if (fs.existsSync(imageDir)) {
@@ -78,6 +60,17 @@ exports.update = async (req, res, next) => {
 		next(error);
 	} finally {
 		session.endSession();
+	}
+};
+
+exports.show = async (req, res, next) => {
+	try {
+		const author = await Author.findById(req.params.id)
+			.select("-password -createdAt -updatedAt -__v")
+			.exec();
+		res.status(200).json({ author });
+	} catch (error) {
+		next(error);
 	}
 };
 
