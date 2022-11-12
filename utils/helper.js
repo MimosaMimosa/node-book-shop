@@ -13,7 +13,7 @@ exports.config = (search, df = null) => {
 		console.error(error);
 	}
 };
-exports.usePagination = (total, currentPage) => {
+exports.usePagination = (total, current) => {
 	let pagination = [];
 	if (total >= 8) {
 		if (current < 5) {
