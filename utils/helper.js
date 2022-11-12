@@ -51,3 +51,20 @@ exports.usePagination = (total, current) => {
 
 	return pagination;
 };
+
+/**
+ * 
+ * @param {number} start 
+ * @param {number} end 
+ * @returns {Array}
+ */
+exports.range = (start, end) => {
+	if (!end) {
+		return [...Array(start).keys()];
+	}
+	return [
+		...Array(end - start + 1)
+			.fill(start)
+			.map((x, y) => x + y),
+	];
+};
