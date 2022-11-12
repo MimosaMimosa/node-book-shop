@@ -2,15 +2,22 @@ const Author = require("../../model/Author");
 const fs = require("fs");
 const path = require("path");
 const mongoose = require("mongoose");
-const { calculatePaginate } = require("../../utils/helper");
+const { calculatePaginate, usePagination } = require("../../utils/helper");
 
 exports.index = async (req, res, next) => {
 	const [currentPage, skip, limit] = calculatePaginate(req);
 	try {
 		const count = await Author.count();
 		const totalPage = Math.ceil(count / limit);
-		const authors = await Author.find().skip(skip).limit(limit).exec();
-		return res.status(200).json({ authors, totalPage, currentPage });
+		const pagination = usePagination(totalPage, currentPage);
+		const authors = await Author.find()
+			.sort({ _id: -1 })
+			.skip(skip)
+			.limit(limit)
+			.exec();
+		return res
+			.status(200)
+			.json({ authors, totalPage, currentPage, pagination });
 	} catch (error) {
 		next(error);
 	}

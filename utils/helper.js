@@ -1,4 +1,4 @@
-exports.calculatePaginate = function (req, amount = 10,) {
+exports.calculatePaginate = function (req, amount = 10) {
 	const currentPage = parseInt(req.query.page ?? 1);
 	const limit = parseInt(req.query.limit ?? amount);
 	const skip = limit * (currentPage - 1);
