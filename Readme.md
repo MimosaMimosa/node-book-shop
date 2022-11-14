@@ -73,3 +73,7 @@ You will see server is running at <http:/localhost:4000>
 -   MongoDB runner [run-s](https://www.npmjs.com/package/run-rs)
 -   Date library is Day.js[Fast 2kB alternative to Moment.js with the same modern API
     ](https://day.js.org/)
+
+# Frontend Sites
+- Admin [dashboard](https://github.com/MimosaMimosa/node-booksho-admin)
+- Client [pages](https://github.com/MimosaMimosa/node-book-shop-client)
