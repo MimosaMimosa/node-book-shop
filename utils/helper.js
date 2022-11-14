@@ -1,8 +1,8 @@
 /**
- * 
- * @param {Object} req 
+ *
+ * @param {Object} req
  * @param {number} amount pagination limit
- * @returns 
+ * @returns
  */
 exports.calculatePaginate = function (req, amount = 10) {
 	const currentPage = parseInt(req.query.page ?? 1);
@@ -33,7 +33,7 @@ exports.usePagination = (total, current, spreader = "...") => {
 	if (total >= 8) {
 		if (current < 5) {
 			pagination = [
-				...this.range(5).map((x, y) => x + y),
+				...[...Array(5).keys()].map((x) => x + 1),
 				spreader,
 				total,
 			];
@@ -41,15 +41,27 @@ exports.usePagination = (total, current, spreader = "...") => {
 			pagination = [
 				1,
 				spreader,
-				...this.range(3, current - 1),
+				...Array(3)
+					.fill(current - 1)
+					.map((x, y) => x + y),
 				spreader,
 				total,
 			];
 		} else if (current + 3 >= total && current !== 5) {
-			pagination = [1, spreader, ...this.range(5, total - 4)];
+			pagination = [
+				1,
+				spreader,
+				...Array(5)
+					.fill(total - 4)
+					.map((x, y) => x + y),
+			];
 		}
 	} else {
-		pagination = this.range(total, 1);
+		pagination = [
+			...Array(total)
+				.fill(1)
+				.map((x, y) => x + y),
+		];
 	}
 
 	return pagination;
