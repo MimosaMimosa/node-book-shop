@@ -6,7 +6,7 @@ const {
     update,
     store,
 } = require('../../controller/admin/author');
-const { updateRequest, storeRequest } = require('../../Validator/author');
+const { updateRequest, storeRequest } = require('../../validator/author');
 const router = Router();
 const { uploadImage } = require('../../utils/upload');
 

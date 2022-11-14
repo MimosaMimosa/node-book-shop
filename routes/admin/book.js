@@ -7,7 +7,7 @@ const {
 	update,
 } = require("../../controller/admin/book");
 const { uploadImage } = require("../../utils/upload");
-const { storeRequest, updateRequest } = require("../../Validator/book");
+const { storeRequest, updateRequest } = require("../../validator/book");
 const router = Router();
 
 router.get("/", index);
