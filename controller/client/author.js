@@ -21,3 +21,12 @@ exports.index = async (req, res, next) => {
 		next(error);
 	}
 };
+
+exports.randomAuthors = async (req, res, next) => {
+	try {
+		const authors = await Author.aggregate().sample(10);
+		res.status(200).json({ authors });
+	} catch (error) {
+		next(error);
+	}
+};

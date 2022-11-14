@@ -68,6 +68,17 @@ Collection.statics.prepareStore = (req) => {
 	return data;
 };
 
+Collection.statics.prepareQuery = (req) => {
+	const { limit, ...others } = req.query;
+	const query = {};
+	Object.keys(others).forEach((key) => {
+		if (others[key]) {
+			query[key] = others[key];
+		}
+	});
+	return query;
+};
+
 const Book = mongoose.model("Book", Collection);
 
 module.exports = Book;

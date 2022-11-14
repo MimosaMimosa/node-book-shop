@@ -60,7 +60,7 @@ exports.update = async (req, res, next) => {
 		}
 		await session.commitTransaction();
 		res.status(200).json({
-			message: "Author updated successfully",
+			message: "Author is updated",
 		});
 	} catch (error) {
 		await session.abortTransaction();

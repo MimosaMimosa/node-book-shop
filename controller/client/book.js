@@ -19,11 +19,15 @@ exports.create = async (req, res, next) => {
 
 exports.index = async (req, res, next) => {
 	try {
-		const [currentPage, skip, limit] = calculatePaginate(req);
+		const [currentPage, skip, limit] = calculatePaginate(
+			req,
+			req.query.limit
+		);
 		const total = await Book.find().count().exec();
 		const totalPage = Math.ceil(total / limit);
 		const pagination = usePagination(total, currentPage);
-		const books = await Book.find()
+		const query = Book.prepareQuery(req);
+		const books = await Book.find(query)
 			.sort({ _id: -1 })
 			.populate("author")
 			.skip(skip)

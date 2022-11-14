@@ -3,6 +3,7 @@ const { calculatePaginate } = require("../../utils/helper");
 const fs = require("fs");
 const path = require("path");
 const mongoose = require("mongoose");
+
 exports.index = async (req, res, next) => {
 	try {
 		const [currentPage, skip, limit] = calculatePaginate(req);
@@ -38,7 +39,7 @@ exports.store = async (req, res, next) => {
 		await Book.create([data], { session });
 		req.mv();
 		await session.commitTransaction();
-		res.status(200).json({ message: "The book is created successfully." });
+		res.status(200).json({ message: "The book is created." });
 	} catch (error) {
 		await session.abortTransaction();
 		next(error);
@@ -84,7 +85,7 @@ exports.update = async (req, res, next) => {
 			});
 		}
 		await session.commitTransaction();
-		res.status(200).json({ message: "The book is updated successfully." });
+		res.status(200).json({ message: "The book is updated." });
 	} catch (error) {
 		await session.abortTransaction();
 		next(error);
@@ -106,7 +107,7 @@ exports.destroy = async (req, res, next) => {
 		});
 
 		await session.commitTransaction();
-		res.status(200).json({ message: "The book is deleted successfully." });
+		res.status(200).json({ message: "The book is deleted." });
 	} catch (error) {
 		await session.abortTransaction();
 		next(error);
