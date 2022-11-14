@@ -1,16 +1,21 @@
+const { default: mongoose } = require("mongoose");
 const verifyEmail = require("../../mail/service/verifyMail");
 const User = require("../../model/User");
 exports.create = async (req, res, next) => {
-	const data = req.body;
+	const session = await mongoose.startSession();
+	session.startTransaction();
 	try {
-		const user = await User.create({ data }).exec();
-		if (req.image) {
-			req.mv();
-		}
+		const data = User.prepareStore(req);
+		const user = await User.create([data]);
+		req.mv();
+		await session.commitTransaction();
 		verifyEmail(user.email);
-		res.status(200).json({ user });
+		res.status(200).json({ user, message: "The user is created" });
 	} catch (error) {
+		await session.abortTransaction();
 		next(error);
+	} finally {
+		session.endSession();
 	}
 };
 
