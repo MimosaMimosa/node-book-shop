@@ -23,13 +23,22 @@ exports.index = async (req, res, next) => {
 			req,
 			req.query.limit
 		);
-		const total = await Book.find().count().exec();
+		const query = Book.prepareQuery(req);
+		const total = await Book.find(query).count().exec();
 		const totalPage = Math.ceil(total / limit);
 		const pagination = usePagination(total, currentPage);
-		const query = Book.prepareQuery(req);
 		const books = await Book.find(query)
 			.sort({ _id: -1 })
-			.populate("author")
+			.populate([
+				{
+					path: "author",
+					model: "Author",
+				},
+				{
+					path: "categories",
+					model: "Category",
+				},
+			])
 			.skip(skip)
 			.limit(limit)
 			.exec();

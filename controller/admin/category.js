@@ -2,7 +2,7 @@ const Category = require("../../model/Category");
 
 exports.index = async (req, res, next) => {
 	try {
-		const categories = await Category.find();
+		const categories = await Category.find().exec();
 		res.status(200).json({ categories });
 	} catch (error) {
 		next(error);

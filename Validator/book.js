@@ -7,10 +7,14 @@ exports.storeRequest = (req, res, next) => {
 		name: Joi.string().max(50).required(),
 		price: Joi.number().required(),
 		published_at: Joi.date().required(),
-		category: Joi.string()
-			.regex(/^(?=[a-f\d]{24}$)(\d+[a-f]|[a-f]+\d)/)
-			.required()
-			.messages({ "string.pattern.base": "Invalid Id" }),
+		categories: Joi.array()
+		.items(
+			Joi.string()
+				.regex(/^(?=[a-f\d]{24}$)(\d+[a-f]|[a-f]+\d)/)
+				.required()
+				.messages({ "string.pattern.base": "Invalid Id" })
+		)
+		.required(),
 		author: Joi.string()
 			.regex(/^(?=[a-f\d]{24}$)(\d+[a-f]|[a-f]+\d)/)
 			.required()
@@ -34,10 +38,14 @@ exports.updateRequest = (req, res, next) => {
 		name: Joi.string().max(50).required(),
 		price: Joi.number().required(),
 		published_at: Joi.date().required(),
-		category: Joi.string()
-			.regex(/^(?=[a-f\d]{24}$)(\d+[a-f]|[a-f]+\d)/)
-			.required()
-			.messages({ "string.pattern.base": "Invalid Id" }),
+		categories: Joi.array()
+			.items(
+				Joi.string()
+					.regex(/^(?=[a-f\d]{24}$)(\d+[a-f]|[a-f]+\d)/)
+					.required()
+					.messages({ "string.pattern.base": "Invalid Id" })
+			)
+			.required(),
 		author: Joi.string()
 			.regex(/^(?=[a-f\d]{24}$)(\d+[a-f]|[a-f]+\d)/)
 			.required()

@@ -34,7 +34,7 @@ const Collection = new Schema(
 			url: { type: String, default: null },
 			name: { type: String, default: null },
 		},
-		category: { type: Schema.ObjectId, ref: "Category" },
+		categories: [{ type: Schema.ObjectId, ref: "Category" }],
 		price: { type: Number, default: null },
 		description: { type: String, max: 255, default: null },
 	},
@@ -64,12 +64,13 @@ Collection.statics.prepareStore = (req) => {
 		url: req.image.path,
 		path: req.image.path,
 		name: req.image.name,
+		categories: data.categories,
 	};
 	return data;
 };
 
 Collection.statics.prepareQuery = (req) => {
-	const { limit, ...others } = req.query;
+	const { limit, categories, ...others } = req.query;
 	const query = {};
 	Object.keys(others).forEach((key) => {
 		if (others[key]) {

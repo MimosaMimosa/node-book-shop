@@ -14,7 +14,7 @@ exports.index = async (req, res, next) => {
 			.limit(limit)
 			.populate([
 				{
-					path: "category",
+					path: "categories",
 					model: "Category",
 					select: "name",
 				},
@@ -53,9 +53,8 @@ exports.show = async (req, res, next) => {
 		const book = await Book.findById(req.params.id)
 			.populate([
 				{
-					path: "category",
+					path: "categories",
 					model: "Category",
-					select: "_id",
 				},
 				{
 					path: "author",
@@ -64,7 +63,7 @@ exports.show = async (req, res, next) => {
 				},
 			])
 			.exec();
-		res.json({ book });
+		res.status(200).json({ book });
 	} catch (error) {
 		next(error);
 	}
