@@ -4,11 +4,10 @@ const jwt = require("jsonwebtoken");
 const { createError } = require("../../utils/error");
 exports.login = async (req, res, next) => {
 	const maxAge = 3 * 24 * 60 * 60;
-	const { email, password } = req.body;
-	console.log(email, password);
+	const { email, password } = req.body
 	try {
-		const user = await User.findOne({ email });
-		if (!user.email_verify_at) {
+		const user = await User.findOne({ email }).exec();
+		if (user && !user.email_verify_at) {
 			return createError(
 				401,
 				{ message: "Please check your email for verification link." },
@@ -25,9 +24,8 @@ exports.login = async (req, res, next) => {
 				env("SECRET_CODE"),
 				{ expiresIn: maxAge }
 			);
-			others.token = token;
 
-			return res.status(200).json({ user: others });
+			return res.status(200).json({ user: others, token });
 		}
 		return createError(
 			422,

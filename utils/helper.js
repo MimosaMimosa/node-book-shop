@@ -2,7 +2,7 @@
  *
  * @param {Object} req
  * @param {number} amount pagination limit
- * @returns
+ * @return {Array} currentPage,skip,limit
  */
 exports.calculatePaginate = function (req, amount = 10) {
 	const currentPage = parseInt(req.query.page ?? 1);

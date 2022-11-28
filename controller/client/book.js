@@ -1,4 +1,5 @@
 const Book = require("../../model/Book");
+const Category = require("../../model/Category");
 const { calculatePaginate, usePagination } = require("../../utils/helper");
 exports.create = async (req, res, next) => {
 	const session = await Book.startSession();
@@ -42,6 +43,7 @@ exports.index = async (req, res, next) => {
 			.skip(skip)
 			.limit(limit)
 			.exec();
+		console.log(books);
 		res.status(200).json({ books, totalPage, currentPage, pagination });
 	} catch (error) {
 		next(error);
@@ -54,6 +56,29 @@ exports.show = async (req, res, next) => {
 			.populate("author")
 			.exec();
 		res.status(200).json({ book });
+	} catch (error) {
+		next(error);
+	}
+};
+
+exports.search = async (req, res, next) => {
+	try {
+		const books = await Book.aggregate([
+			{
+				$lookup: {
+					from: Category.collection.collectionName,
+					localField: "categories",
+					foreignField: "_id",
+					as: "categories",
+				},
+			},
+			{
+				$match:{
+					"categories.name" : 'Historical',
+				}
+			}
+		]).exec();
+		res.status(200).json({ books });
 	} catch (error) {
 		next(error);
 	}

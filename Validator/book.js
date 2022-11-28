@@ -61,5 +61,6 @@ exports.updateRequest = (req, res, next) => {
 		description: Joi.string().max(255).required(),
 	};
 	const schema = Joi.object(rule);
+	
 	ErrorBag(req, next, schema);
 };

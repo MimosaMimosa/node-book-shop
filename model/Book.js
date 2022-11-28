@@ -18,7 +18,7 @@ const image = new Schema(
 			get: (path) => path.substr(1),
 		},
 	},
-	{
+	{	
 		toObject: { getters: true, setters: true },
 		toJSON: { getters: true, setters: true },
 	}
@@ -70,13 +70,18 @@ Collection.statics.prepareStore = (req) => {
 };
 
 Collection.statics.prepareQuery = (req) => {
-	const { limit, categories, ...others } = req.query;
+	const { limit, category, ...others } = req.query;
 	const query = {};
 	Object.keys(others).forEach((key) => {
 		if (others[key]) {
 			query[key] = others[key];
 		}
 	});
+	if (category) {
+		query.categories = {
+			$in: [category],
+		};
+	}
 	return query;
 };
 

@@ -1,12 +1,9 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const { create, index, show } = require('../../controller/client/book');
-const { verifyToken } = require('../../middleware/auth');
-const { uploadImage } = require('../../utils/upload');
-const { storeRequest } = require('../../validator/book');
+const { index, show, search } = require("../../controller/client/book");
 
-router.get('/', index);
-router.post('/', storeRequest, uploadImage('upload.images'), create);
-router.get('/:id', verifyToken, show);
+router.get("/", index);
+router.get("/:id", show);
+router.get("/search/queries", search);
 
 module.exports = router;

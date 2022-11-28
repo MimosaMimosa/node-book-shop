@@ -1,4 +1,5 @@
 const Author = require("../../model/Author");
+const { calculatePaginate, usePagination } = require("../../utils/helper");
 
 exports.create = async (req, res, next) => {
 	req.body.image = { url: req.image.path, name: req.image.name };
@@ -15,8 +16,15 @@ exports.create = async (req, res, next) => {
 
 exports.index = async (req, res, next) => {
 	try {
-		const authors = await Author.find().sort({ _id: -1 }).limit(5);
-		res.status(200).json({ authors });
+		const [currentPage, skip, limit] = calculatePaginate(req, 25);
+		const count = await Author.count();
+		const totalPage = Math.ceil(count / limit);
+		const pagination = usePagination(totalPage, currentPage);
+		const authors = await Author.find()
+			.sort({ _id: -1 })
+			.skip(skip)
+			.limit(limit);
+		res.status(200).json({ authors, currentPage, totalPage, pagination });
 	} catch (error) {
 		next(error);
 	}
