@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const { hash } = require("../utils/bcrypt");
 const { Schema } = mongoose;
+
 const Collection = new Schema(
 	{
 		name: { type: String, required: true, max: 50 },

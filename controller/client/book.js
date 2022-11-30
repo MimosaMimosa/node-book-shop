@@ -43,7 +43,6 @@ exports.index = async (req, res, next) => {
 			.skip(skip)
 			.limit(limit)
 			.exec();
-		console.log(books);
 		res.status(200).json({ books, totalPage, currentPage, pagination });
 	} catch (error) {
 		next(error);

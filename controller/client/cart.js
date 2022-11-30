@@ -60,7 +60,11 @@ exports.destroyProduct = async (req, res, next) => {
 				},
 			])
 			.exec();
-		res.status(200).json({ carts, message: "The product is deleted" });
+		res.status(200).json({
+			carts,
+			message: "The product is deleted",
+			id: req.params.id,
+		});
 	} catch (error) {
 		next(error);
 	}

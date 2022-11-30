@@ -6,22 +6,28 @@ exports.store = async (req, res, next) => {
 	try {
 		const { products, address, phone } = req.body;
 		const user = req.user;
+		
+		const bookIds = products.map((product) =>
+			mongoose.Types.ObjectId(product.book)
+		);
 
 		const books = await Book.find({
-			$in: {
-				_id: products.map((product) => product.book),
+			_id: {
+				$in: bookIds,
 			},
 		})
 			.select(["_id", "price"])
 			.exec();
 
 		const amount = books
-			.map(
-				(book) =>
-					book.price *
-						products.find((product) => product.id === book.id)
-							.quantity ?? 0
-			)
+			.map((book) => {
+				const price = book.price;
+				const product = products.find(
+					(product) => product.book === book.id
+				);
+				if (!product) return 0;
+				return price * product.quantity;
+			})
 			.reduce((a, b) => a + b);
 
 		const data = {
@@ -33,7 +39,10 @@ exports.store = async (req, res, next) => {
 		};
 
 		const order = await Order.create([data]);
-		res.status(200).json({ order: order[0] ,message:'Your order is accepted'});
+		res.status(200).json({
+			order: order[0],
+			message: "Your order is accepted",
+		});
 	} catch (error) {
 		next(error);
 	}

@@ -44,7 +44,7 @@ app.use((error, req, res, next) => {
 connectDB()
 	.then(() => {
 		const port = env("SERVER_PORT");
-		app.listen(port, () => {
+		app.listen(4000, () => {
 			console.log(`Server is running at port:${port}`);
 		});
 	})
