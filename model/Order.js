@@ -22,7 +22,7 @@ const Collection = new Schema(
 		status: {
 			type: Number,
 			default: 0,
-			enum: [0, 1, 2],
+			enum: [0, 1, 2, 3],
 			get: (value) => {
 				const data = { code: value };
 				switch (value) {
@@ -31,6 +31,9 @@ const Collection = new Schema(
 						break;
 					case 2:
 						data.label = "cancel";
+						break;
+					case 3:
+						data.label = "delivered";
 						break;
 					default:
 						data.label = "pending";

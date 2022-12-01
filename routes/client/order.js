@@ -6,7 +6,7 @@ const { storeRequest } = require("../../validator/order");
 const router = Router();
 
 router.post("/", verifyToken, storeRequest, store);
-router.get("/", index);
+router.get("/", verifyToken, index);
 router.get("/:id", show);
 
 module.exports = router;

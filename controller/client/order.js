@@ -6,7 +6,7 @@ exports.store = async (req, res, next) => {
 	try {
 		const { products, address, phone } = req.body;
 		const user = req.user;
-		
+
 		const bookIds = products.map((product) =>
 			mongoose.Types.ObjectId(product.book)
 		);
@@ -50,8 +50,13 @@ exports.store = async (req, res, next) => {
 
 exports.index = async (req, res, next) => {
 	try {
-		const orders = await Order.find().exec();
-		res.status(200).json(orders);
+		const orders = await Order.find({
+			user: req.user._id,
+		})
+			.sort({ _id: -1 })
+			.select(["-products"])
+			.exec();
+		res.status(200).json({ orders });
 	} catch (error) {
 		next(error);
 	}
